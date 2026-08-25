@@ -1,4 +1,4 @@
-# Sample configurations for syslog
+# Rsyslog
 
 ## Installing rsyslog
 ```
@@ -25,7 +25,7 @@ Followed [rsyslog doc](https://docs.rsyslog.com/doc/tutorials/tls.html)
 ## 11-split-tcp.conf and 12-split-udp.conf
 Writes TCP and UDP logs to files
 
-## ossec.conf
+# ossec.conf
 
 Remove syslog listener
 ```
@@ -57,10 +57,27 @@ Restart wazuh-manager to release 514 udp socket, then start rsyslog
 
 Check `ss -tulpn` output for "rsyslogd" process
 
-## nginx.conf
+# nginx.conf
 
 If there is already an Nginx instance, it can be used as TLS termination proxy for Syslog over TLS
 
 It listens on 6514 (any port can be chosen) and passes raw TCP to Wazuh, where rsyslog handles it. Wazuh can't natively handle syslog over TCP or TLS
 
 Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html)
+
+# logrotate
+
+Copy to `/etc/logrotate.d/`
+
+What the conf does:
+- Keeps files for 30 days
+- Compresses
+- `copytruncate` to allow for file release
+- Sets permissions for Wazuh files
+- Runs regardless of file size, as longs as file is not empty
+
+Followed [this](https://www.dash0.com/guides/log-rotation-linux-logrotate#understanding-log-rotation-triggers) logrotate blog
+
+# cron
+
+Copy to `/etc/cron.hourly`

@@ -1,0 +1,12 @@
+/var/ossec/logs/alerts/*/*/*.log
+/var/ossec/logs/alerts/*/*/*.json {
+    rotate 999
+    maxage 30
+    compress
+    missingok
+    notifempty
+    su wazuh wazuh
+    create 0640 wazuh wazuh
+    copytruncate
+}
+
