@@ -67,7 +67,13 @@ Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.ht
 
 # logrotate
 
-Copy to `/etc/logrotate.d/`
+Don't forget to uncomment `compress` in
+```
+# uncomment this if you want your log files compressed
+compress
+```
+
+Then copy files in `logrotate.d`to `/etc/logrotate.d/`
 
 What the conf does:
 - Keeps files for 30 days
