@@ -67,7 +67,7 @@ Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.ht
 
 # logrotate
 
-Don't forget to uncomment `compress` in
+Don't forget to uncomment `compress` in `/etc/logrotate.conf`
 ```
 # uncomment this if you want your log files compressed
 compress
