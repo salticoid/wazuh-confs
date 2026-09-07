@@ -1,0 +1,10 @@
+/var/log/hosts/*.log {
+  rotate -1
+  compress
+  missingok
+  notifempty
+  sharedscripts
+  postrotate
+    /usr/lib/rsyslog/rsyslog-rotate
+  endscript
+}

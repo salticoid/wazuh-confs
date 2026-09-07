@@ -1,8 +1,0 @@
-/var/log/hosts/*.log {
-    rotate 999
-    maxage 30
-    compress
-    missingok
-    notifempty
-    copytruncate
-}

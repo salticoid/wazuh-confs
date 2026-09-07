@@ -1,4 +1,0 @@
-#!/usr/bin/sh
-
-logrotate -f /etc/logrotate.d/rsyslog-hosts
-

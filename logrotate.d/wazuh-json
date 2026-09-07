@@ -1,0 +1,8 @@
+/var/ossec/logs/alerts/*/*/*.json
+/var/ossec/logs/archives/*/*/*.json
+{
+  rotate -1
+  compress
+  missingok
+  notifempty
+}

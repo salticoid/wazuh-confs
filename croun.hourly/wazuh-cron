@@ -1,6 +1,16 @@
 #!/usr/bin/sh
 
-logrotate -f /etc/logrotate.d/ossec-archive
 logrotate -f /etc/logrotate.d/wazuh-alerts
-logrotate -f /etc/logrotate.d/wazuh-archive
+logrotate -f /etc/logrotate.d/wazuh-archives
+logrotate -f /etc/logrotate.d/wazuh-rsyslog
 
+# delete week old alerts
+find /var/ossec/logs/alerts -type f -mtime +7 -delete
+
+# delete 3 month old archives and rsyslog logs
+find /var/ossec/logs/archives -type f -mtime +90 -delete
+find /var/log/hosts -type f -mtime +90 -delete
+
+# delete empty month directories
+find /var/ossec/logs/alerts -mindepth 1 -type d -empty -delete
+find /var/ossec/logs/archives -mindepth 1 -type d -empty -delete
