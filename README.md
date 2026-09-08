@@ -9,7 +9,7 @@ In ossec.conf add
   <alerts_log>no</alerts_log>
   <logall>no</logall>
   <logall_json>yes</logall_json>
-  <max_output_size>1G</max_output_size>
+  <max_output_size>20G</max_output_size>
 </global>
 ```
 What each configuration does:
@@ -20,7 +20,7 @@ What each configuration does:
   - [logall_json](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall-json): write archive.json
   - [logall](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall): don't write archive.log
 - For rotation:
-  - [max-output-size](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#max-output-size): rotate archives.json and alerts.json when alerts.json reaches the value defined in max-output-size
+  - [max-output-size](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#max-output-size): rotate archives.json and alerts.json when alerts.json reaches the value defined in max-output-size. 20G is reasonable for big medium to big deployments
 
 I also tried [rotate_interval](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall) for rotation, it rotates archives.json and alerts.json, but doesn't compress them if multiple rotations happened in the same day (this is an [open bug](https://github.com/wazuh/wazuh/issues/35021)), so the workaround is splitting files by size and compress them with logrotate.
 

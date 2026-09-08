@@ -1,7 +1,6 @@
 #!/usr/bin/sh
 
-logrotate -f /etc/logrotate.d/wazuh-alerts
-logrotate -f /etc/logrotate.d/wazuh-archives
+logrotate -f /etc/logrotate.d/wazuh-json
 logrotate -f /etc/logrotate.d/wazuh-rsyslog
 
 # delete week old alerts
