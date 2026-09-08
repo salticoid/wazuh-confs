@@ -46,7 +46,7 @@ Restart `wazuh-manager` to release 514 udp socket
 # local_internal_options.conf
 Because of the aforementioned compression bug, we'll be using using logrotate for compression and disabling Wazuh compression by adding this line:
 ```
-monitord.compress=1
+monitord.compress=0
 ```
 
 # Rsyslog
