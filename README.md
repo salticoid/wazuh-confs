@@ -86,7 +86,7 @@ Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.ht
 # logrotate
 
 Logrotate 3.19.0+ required for skipping hardlinked files
-If using Rocky/CentOS, follow [this guide](rhel-logrotate.md) to build from source
+If using Rocky/CentOS, follow [this guide](RHEL-LOGROTATE.md) to build from source
 
 ## logrotate.conf
 
