@@ -85,12 +85,16 @@ Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.ht
 
 # logrotate
 
-Don't forget to uncomment `compress` in `/etc/logrotate.conf`
+Logrotate 3.19.0+ required for skipping hardlinked files
+If using Rocky/CentOS, follow [this guide](rhel-logrotate.md) to build from source
+
+## logrotate.conf
+
+Uncomment `compress` in `/etc/logrotate.conf`
 ```
 # uncomment this if you want your log files compressed
 compress
 ```
-
 Then copy files in `logrotate.d` to `/etc/logrotate.d/`
 
 ## What each logrotate does:
@@ -115,6 +119,7 @@ Compresses alerts and archives.
 Compresses logs captured by rsyslog
 - `rotate -1` keeps unlimited compressed files
 - `postrotate` runs `/usr/lib/rsyslog/rsyslog-rotate`, a helper script that refreshes `rsyslog` file handlers
+- `sharedscripts` to run the `postrotate` script once all files are rotated
 ```
 /var/log/hosts/*.log {
   rotate -1
@@ -122,12 +127,11 @@ Compresses logs captured by rsyslog
   missingok
   notifempty
   postrotate
+  sharedscripts
     /usr/lib/rsyslog/rsyslog-rotate
   endscript
 }
 ```
-
-### 
 
 # Cron scripts
 
