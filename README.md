@@ -127,6 +127,28 @@ Compresses logs captured by rsyslog
 }
 ```
 
+# zabbix_agent2.d
+Copy `zabbix_agent2.d/custom.conf` to `/etc/zabbix/zabbix_agent2.d`, this is a modular config, change `Hostname` and `ServerActive` as needed
+
+```
+#main
+Hostname=hostname
+ServerActive=server
+
+#keys
+AllowKey=system.run[systemctl is-active wazuh-indexer]
+AllowKey=system.run[systemctl is-active wazuh-manager]
+AllowKey=system.run[systemctl is-active wazuh-dashboard]
+AllowKey=system.run[systemctl is-active filebeat]
+AllowKey=system.run[journalctl -p err*,*]
+AllowKey=system.run[journalctl -p warning*,*]
+AllowKey=system.run[systemctl --failed*,*]
+
+#userparameters
+UserParameter=wazuh.version,/var/ossec/bin/wazuh-control info 2>/dev/null | /usr/bin/awk -F\" '/WAZUH_VERSION/{print $2; exit}'
+```
+
+
 # Cron scripts
 
 Copy `wazuh-cron` to `/etc/cron.hourly`
