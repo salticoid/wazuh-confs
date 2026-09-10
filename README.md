@@ -1,9 +1,9 @@
 # ossec.conf
 
-According to [Wazuh docs for local configuration](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html) we don't need to write logs files at all, so logging alerts.log and archives.log can be disabled
+According to [Wazuh docs for local configuration](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html) we don't need to write logs files at all, so logging `alerts.log` and `archives.log` can be disabled
 
 In `ossec.conf` add
-```yml
+```
 <global>
   <jsonout_output>yes</jsonout_output>
   <alerts_log>no</alerts_log>
@@ -77,14 +77,6 @@ Followed [rsyslog doc](https://docs.rsyslog.com/doc/tutorials/tls.html)
 ## 11-split-tcp.conf and 12-split-udp.conf
 Writes TCP and UDP logs to files at `/var/log/hosts/`
 
-# nginx.conf
-
-If there is already an Nginx instance, it can be used as TLS termination proxy for Syslog over TLS
-
-It listens on 6514 (any port can be chosen) and passes raw TCP to Wazuh, where rsyslog handles it. Wazuh can't natively handle syslog over TCP or TLS
-
-Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html)
-
 # logrotate
 
 Logrotate >3.19.0 is required for skipping hardlinked files
@@ -135,8 +127,6 @@ Compresses logs captured by rsyslog
 }
 ```
 
-### 
-
 # Cron scripts
 
 Copy `wazuh-cron` to `/etc/cron.hourly`
@@ -160,3 +150,11 @@ find /var/ossec/logs/archives -mindepth 1 -type d -empty -delete
 ```
 - Calls logrotate
 - Deletes files and directories based on a retention policy. In this case: 7 days for alerts, 3 months for archives
+
+# nginx.conf
+
+If there is already an Nginx instance, it can be used as TLS termination proxy for Syslog over TLS
+
+It listens on 6514 (any port can be chosen) and passes raw TCP to Wazuh, where rsyslog handles it. Wazuh can't natively handle syslog over TCP or TLS
+
+Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html)
