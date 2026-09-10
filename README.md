@@ -97,7 +97,7 @@ Then copy files in `logrotate.d` to `/etc/logrotate.d/`
 ### wazuh-json
 Compresses alerts and archives.
 - `rotate -1`: keeps unlimited compressed files
-- `noallowhardlink`: Wazuh hardlinks the files at `/var/ossec/log/[alerts|archives]/[alerts|archives].json` and `/var/ossec/log/[alerts|archives]/YYYY/MM/ossec-[alerts|archives]-DD-<rotation-count>.json`, so setting this explicitly instructs logrotate not to rotate hardlinked files, we instead wait for Wazuh to release them according to [`ossec.conf`](#ossec.conf) configuration.
+- `noallowhardlink`: Wazuh hardlinks the files at `/var/ossec/log/[alerts|archives]/[alerts|archives].json` and `/var/ossec/log/[alerts|archives]/YYYY/MM/ossec-[alerts|archives]-DD-<rotation-count>.json`, so setting this explicitly instructs logrotate not to rotate hardlinked files, we instead wait for Wazuh to release them according to [`ossec.conf`](#ossecconf) configuration.
 ```
 /var/ossec/logs/alerts/*/*/*.json
 /var/ossec/logs/archives/*/*/*.json
