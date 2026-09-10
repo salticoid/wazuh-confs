@@ -2,7 +2,7 @@
 
 According to [Wazuh docs for local configuration](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html) we don't need to write logs files at all, so logging alerts.log and archives.log can be disabled
 
-In ossec.conf add
+In `ossec.conf` add
 ```yml
 <global>
   <jsonout_output>yes</jsonout_output>
@@ -14,15 +14,17 @@ In ossec.conf add
 ```
 What each configuration does:
 - For alerts:
-  - [jsonout_output](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#jsonout-output): write alerts.json
-  - [alerts_log](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#alerts-log): don't write alerts.log
+  - [jsonout_output](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#jsonout-output): write `alerts.json`
+  - [alerts_log](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#alerts-log): don't write `alerts.log`
 - For archives:
-  - [logall_json](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall-json): write archive.json
-  - [logall](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall): don't write archive.log
+  - [logall_json](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall-json): write `archives.json`
+  - [logall](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall): don't write `archives.log`
 - For rotation:
-  - [max-output-size](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#max-output-size): rotate archives.json and alerts.json when alerts.json reaches the value defined in max-output-size. 20G is reasonable for big medium to big deployments
+  - [max-output-size](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#max-output-size): rotate `archives.json` and `alerts.json` when `alerts.json` reaches the value defined in `max-output-size`. `20G` is reasonable for big medium to big deployments
 
-I also tried [rotate_interval](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall) for rotation, it rotates archives.json and alerts.json, but doesn't compress them if multiple rotations happened in the same day (this is an [open bug](https://github.com/wazuh/wazuh/issues/35021)), so the workaround is splitting files by size and compress them with logrotate.
+I also tried [rotate_interval](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/global.html#logall) for rotation, it rotates `archives.json` and `alerts.json`, but doesn't compress them if multiple rotations happened in the same day (this is an [open bug](https://github.com/wazuh/wazuh/issues/35021)), so the workaround is splitting files by size and compress them with logrotate.
+
+---
 
 First remove syslog listener
 ```
@@ -41,7 +43,7 @@ And add the following for Wazuh to monitor local files:
   <location>/var/log/hosts/*.log</location>
 </localfile>
 ```
-Restart `wazuh-manager` to release 514 udp socket
+Restart `wazuh-manager` to release 514 udp socket (check with `ss -tulpn` for `rsyslogd` process)
 
 # local_internal_options.conf
 Because of the aforementioned compression bug, we'll be using using logrotate for compression and disabling Wazuh compression by adding this line:
@@ -57,7 +59,7 @@ sudo apt update && sudo apt install -y rsyslog rsyslog-gnutls
 ```
 
 ## rsyslog.conf:
-Modules can only be loaded once, so they are loaded in rsyslog.conf if used more than once in `/etc/rsyslog.d/`
+Modules can only be loaded once, so they are loaded in `rsyslog.conf` if used more than once in `/etc/rsyslog.d/`
 
 In this case:
 ```
@@ -85,8 +87,9 @@ Followed [nginx doc](https://nginx.org/en/docs/stream/ngx_stream_proxy_module.ht
 
 # logrotate
 
-Logrotate 3.19.0+ required for skipping hardlinked files
-If using Rocky/CentOS, follow [this guide](RHEL-LOGROTATE.md) to build from source
+Logrotate >3.19.0 is required for skipping hardlinked files
+
+If using Rocky/CentOS, follow [this guide](rhel-logrotate.md) to build from source
 
 ## logrotate.conf
 
@@ -101,8 +104,8 @@ Then copy files in `logrotate.d` to `/etc/logrotate.d/`
 
 ### wazuh-json
 Compresses alerts and archives.
-- `rotate -1` keeps unlimited compressed files
-- `noallowhardlink`: Wazuh hardlinks the files at `/var/ossec/log/[alerts|archives]/[alerts|archives].json` and `/var/ossec/log/[alerts|archives]/YYYY/MM/ossec-[alerts|archives]-DD-<rotation-count>.json`, so setting this explicitly instructs logrotate not to rotate hardlinked files, we instead wait for Wazuh to release them according to `ossec.conf` configuration.
+- `rotate -1`: keeps unlimited compressed files
+- `noallowhardlink`: Wazuh hardlinks the files at `/var/ossec/log/[alerts|archives]/[alerts|archives].json` and `/var/ossec/log/[alerts|archives]/YYYY/MM/ossec-[alerts|archives]-DD-<rotation-count>.json`, so setting this explicitly instructs logrotate not to rotate hardlinked files, we instead wait for Wazuh to release them according to [`ossec.conf`](#ossec.conf) configuration.
 ```
 /var/ossec/logs/alerts/*/*/*.json
 /var/ossec/logs/archives/*/*/*.json
@@ -119,7 +122,7 @@ Compresses alerts and archives.
 Compresses logs captured by rsyslog
 - `rotate -1` keeps unlimited compressed files
 - `postrotate` runs `/usr/lib/rsyslog/rsyslog-rotate`, a helper script that refreshes `rsyslog` file handlers
-- `sharedscripts` to run the `postrotate` script once all files are rotated
+- `sharedscripts` runs the `postrotate` script once all files are rotated
 ```
 /var/log/hosts/*.log {
   rotate -1
@@ -127,11 +130,12 @@ Compresses logs captured by rsyslog
   missingok
   notifempty
   postrotate
-  sharedscripts
     /usr/lib/rsyslog/rsyslog-rotate
   endscript
 }
 ```
+
+### 
 
 # Cron scripts
 
