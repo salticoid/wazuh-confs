@@ -115,12 +115,14 @@ Compresses logs captured by rsyslog
 - `rotate -1` keeps unlimited compressed files
 - `postrotate` runs `/usr/lib/rsyslog/rsyslog-rotate`, a helper script that refreshes `rsyslog` file handlers
 - `sharedscripts` runs the `postrotate` script once all files are rotated
+- `olddir` moves files to the specified directory for rotation
 ```
 /var/log/hosts/*.log {
   rotate -1
   compress
   missingok
   notifempty
+  olddir /var/log/hosts/gz
   postrotate
     /usr/lib/rsyslog/rsyslog-rotate
   endscript

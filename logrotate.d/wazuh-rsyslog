@@ -3,6 +3,7 @@
   compress
   missingok
   notifempty
+  olddir /var/log/hosts/gz
   postrotate
     /usr/lib/rsyslog/rsyslog-rotate
   endscript
