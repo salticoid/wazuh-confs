@@ -4,6 +4,7 @@
   missingok
   notifempty
   postrotate
+  olddir /var/log/hosts/gz
     /usr/bin/systemctl -s HUP kill rsyslog.service >/dev/null 2>&1 || true
   endscript
 }
