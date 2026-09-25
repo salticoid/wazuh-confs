@@ -3,12 +3,12 @@
 logrotate -f /etc/logrotate.d/wazuh-json
 logrotate -f /etc/logrotate.d/wazuh-rsyslog
 
-# delete week old alerts
+# delete week old alerts and rsyslog logs
 find /var/ossec/logs/alerts -type f -mtime +7 -delete
+find /var/log/hosts -type f -mtime +7 -delete
 
-# delete 3 month old archives and rsyslog logs
+# delete 3 month old archives
 find /var/ossec/logs/archives -type f -mtime +90 -delete
-find /var/log/hosts -type f -mtime +90 -delete
 
 # delete empty month directories
 find /var/ossec/logs/alerts -mindepth 1 -type d -empty -delete
