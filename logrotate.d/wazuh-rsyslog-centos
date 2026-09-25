@@ -3,8 +3,8 @@
   compress
   missingok
   notifempty
-  postrotate
   olddir /var/log/hosts/gz
+  postrotate
     /usr/bin/systemctl -s HUP kill rsyslog.service >/dev/null 2>&1 || true
   endscript
 }
