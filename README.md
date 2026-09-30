@@ -81,7 +81,7 @@ Writes TCP and UDP logs to files at `/var/log/hosts/`
 
 Logrotate >3.19.0 is required for skipping hardlinked files
 
-If using Rocky/CentOS, follow [this guide](rhel-logrotate.md) to build from source
+If using Rocky/CentOS, follow [this guide](RHEL-LOGROTATE.md) to build from source
 
 ## logrotate.conf
 
