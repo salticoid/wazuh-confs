@@ -3,6 +3,8 @@
 {
   rotate -1
   compress
+  compresscmd /usr/bin/zstd
+  compressext .zst
   missingok
   notifempty
   noallowhardlink

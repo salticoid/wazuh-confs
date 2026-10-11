@@ -80,8 +80,9 @@ Writes TCP and UDP logs to files at `/var/log/hosts/`
 # logrotate
 
 Logrotate >3.19.0 is required for skipping hardlinked files
+Also make sure `zstd` is installed
 
-If using Rocky/CentOS, follow [this guide](RHEL-LOGROTATE.md) to build from source
+If using Rocky/CentOS, follow [this guide](RHEL-LOGROTATE.md) to build logrotate from source
 
 ## logrotate.conf
 
@@ -97,6 +98,7 @@ Then copy files in `logrotate.d` to `/etc/logrotate.d/`
 ### wazuh-json
 Compresses alerts and archives.
 - `rotate -1`: keeps unlimited compressed files
+- `compresscmd /usr/bin/zstd`: Use `zstd` for file compression
 - `noallowhardlink`: Wazuh hardlinks the files at `/var/ossec/log/[alerts|archives]/[alerts|archives].json` and `/var/ossec/log/[alerts|archives]/YYYY/MM/ossec-[alerts|archives]-DD-<rotation-count>.json`, so setting this explicitly instructs logrotate not to rotate hardlinked files, we instead wait for Wazuh to release them according to [`ossec.conf`](#ossecconf) configuration.
 ```
 /var/ossec/logs/alerts/*/*/*.json
@@ -104,15 +106,19 @@ Compresses alerts and archives.
 {
   rotate -1
   compress
+  compresscmd /usr/bin/zstd
+  compressext .zst
   missingok
   notifempty
   noallowhardlink
 }
+
 ```
 
 ### wazuh-rsyslog
 Compresses logs captured by rsyslog
 - `rotate -1` keeps unlimited compressed files
+- `compresscmd /usr/bin/zstd`: Use `zstd` for file compression
 - `postrotate` runs `/usr/lib/rsyslog/rsyslog-rotate`, a helper script that refreshes `rsyslog` file handlers
 - `sharedscripts` runs the `postrotate` script once all files are rotated
 - `olddir` moves files to the specified directory for rotation
@@ -120,6 +126,8 @@ Compresses logs captured by rsyslog
 /var/log/hosts/*.log {
   rotate -1
   compress
+  compresscmd /usr/bin/zstd
+  compressext .zst
   missingok
   notifempty
   olddir /var/log/hosts/gz

@@ -1,6 +1,8 @@
 /var/log/hosts/*.log {
   rotate -1
   compress
+  compresscmd /usr/bin/zstd
+  compressext .zst
   missingok
   notifempty
   olddir /var/log/hosts/gz
