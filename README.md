@@ -159,6 +159,7 @@ AllowKey=system.run[systemctl --failed*,*]
 UserParameter=wazuh.version,/var/ossec/bin/wazuh-control info 2>/dev/null | /usr/bin/awk -F\" '/WAZUH_VERSION/{print $2; exit}'
 ```
 
+And use [this custom template](https://github.com/salticoid/wazuh-zabbix)
 
 # Cron scripts
 
