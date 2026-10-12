@@ -5,7 +5,7 @@
   compressext .zst
   missingok
   notifempty
-  olddir /var/log/hosts/gz
+  olddir /var/log/hosts/old
   postrotate
     /usr/bin/systemctl -s HUP kill rsyslog.service >/dev/null 2>&1 || true
   endscript
